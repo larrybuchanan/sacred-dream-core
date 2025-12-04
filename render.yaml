@@ -1,0 +1,14 @@
+# render.yaml
+services:
+  - type: background
+    name: sync-quick
+    env: node
+    buildCommand: npm install
+    startCommand: node functions/syncQuick.js
+    schedule: '*/15 * * * *'
+  - type: background
+    name: sync-full
+    env: node
+    buildCommand: npm install
+    startCommand: node functions/syncFull.js
+    schedule: '0 */6 * * *'
