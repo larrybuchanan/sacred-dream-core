@@ -1,0 +1,18 @@
+{
+  "name": "dropbox-sync-service",
+  "version": "1.0.0",
+  "description": "Scheduled Dropbox to Supabase sync service",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start:quick": "node dist/functions/syncQuick.js",
+    "start:full": "node dist/functions/syncFull.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.0.0",
+    "dropbox": "^11.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
