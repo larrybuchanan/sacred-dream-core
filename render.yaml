@@ -3,12 +3,13 @@ services:
   - type: background
     name: sync-quick
     env: node
-    buildCommand: npm install
-    startCommand: node functions/syncQuick.js
+    buildCommand: npm install && npm run build
+    startCommand: node dist/functions/syncQuick.js
     schedule: '*/15 * * * *'
+
   - type: background
     name: sync-full
     env: node
-    buildCommand: npm install
-    startCommand: node functions/syncFull.js
+    buildCommand: npm install && npm run build
+    startCommand: node dist/functions/syncFull.js
     schedule: '0 */6 * * *'
