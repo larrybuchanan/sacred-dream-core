@@ -1,4 +1,5 @@
 {
+  "name": "sacred-dream-core",
   "version": "1.0.0",
   "description": "Scheduled Dropbox to Supabase sync service",
   "main": "index.js",
@@ -18,5 +19,9 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "license": "MIT"
 }
