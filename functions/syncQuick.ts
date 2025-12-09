@@ -1,14 +1,32 @@
+import { upsertFilesToSupabase } from "../utils/supabaseClient";
+import { Dropbox } from "dropbox";
+import "dotenv/config";
 
-// syncQuick.ts
-import { getDropboxFilesModifiedAfter } from '../utils/dropboxClient';
-import { upsertFilesToSupabase } from '../utils/supabaseClient';
+const dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN! });
 
-const FIFTEEN_MINUTES = 15 * 60 * 1000;
+export async function syncQuick() {
+  try {
+    console.log("⚡ Starting quick Dropbox sync...");
 
-async function main() {
-  const cutoffTime = new Date(Date.now() - FIFTEEN_MINUTES);
-  const files = await getDropboxFilesModifiedAfter(cutoffTime);
-  await upsertFilesToSupabase(files);
+    const response = await dbx.filesListFolder({ path: "", recursive: false });
+
+    const filesToSave = response.result.entries
+      .filter((file): file is Dropbox.files.FileMetadataReference => file[".tag"] === "file")
+      .map(file => ({
+        path: file.path_display!,
+        filename: file.name,
+        modified_at: file.server_modified!,
+        tags: [file.name.split('.').pop()?.toLowerCase() || "unknown"],
+        source: "dropbox",
+      }));
+
+    const { data, error } = await upsertFilesToSupabase(filesToSave);
+    if (error) console.error("❌ Supabase upsert error:", error);
+    else console.log(`✅ Synced ${data?.length ?? 0} files.`);
+
+  } catch (error) {
+    console.error("❌ Dropbox syncQuick error:", error);
+  }
 }
 
-main().catch(console.error);
+syncQuick();

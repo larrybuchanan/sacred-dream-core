@@ -1,20 +1,12 @@
-
-// dropboxClient.ts
 import { Dropbox } from 'dropbox';
+import dotenv from 'dotenv';
 
-const dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN });
+dotenv.config(); // Load environment variables from .env
 
-export async function getDropboxFilesModifiedAfter(date: Date) {
-  const entries = await listFiles();
-  return entries.filter(file => new Date(file.server_modified) > date);
+const ACCESS_TOKEN = process.env.DROPBOX_TOKEN;
+
+if (!ACCESS_TOKEN) {
+  throw new Error("❌ Missing DROPBOX_TOKEN in .env");
 }
 
-export async function getAllDropboxFiles() {
-  return listFiles();
-}
-
-async function listFiles(path = '') {
-  let response = await dbx.filesListFolder({ path, recursive: true });
-  let files = response.result.entries.filter(entry => entry['.tag'] === 'file');
-  return files;
-}
+export const dbx = new Dropbox({ accessToken: ACCESS_TOKEN });

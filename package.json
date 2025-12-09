@@ -1,20 +1,22 @@
 {
-  "name": "dropbox-sync-service",
   "version": "1.0.0",
   "description": "Scheduled Dropbox to Supabase sync service",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
     "start:quick": "node dist/functions/syncQuick.js",
-    "start:full": "node dist/functions/syncFull.js"
+    "start:full": "node dist/functions/syncFull.js",
+    "start:fulltext": "node dist/functions/fullTextIndex.js"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.0.0",
-    "dropbox": "^10.34.0"
-
+    "@supabase/supabase-js": "^2.87.0",
+    "dotenv": "^16.6.1",
+    "dropbox": "^10.34.0",
+    "mammoth": "^1.11.0",
+    "pdf-parse": "^1.1.4"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "typescript": "^5.0.0"
   }
 }
-Downgrade dropbox version to resolve Render build error
