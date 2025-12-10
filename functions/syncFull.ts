@@ -1,4 +1,6 @@
-import { Dropbox } from 'dropbox';
+// functions/syncFull.ts
+
+import Dropbox from 'dropbox-sdk'; // ✅ Correct package
 import dotenv from 'dotenv';
 import { upsertFilesToSupabase } from '../utils/supabaseClient';
 
@@ -9,7 +11,7 @@ if (!ACCESS_TOKEN) {
   throw new Error("❌ Missing DROPBOX_TOKEN in .env");
 }
 
-const dbx = new Dropbox({ accessToken: ACCESS_TOKEN });
+const dbx = new Dropbox({ accessToken: ACCESS_TOKEN }); // works with dropbox-sdk
 
 async function listAllFiles(cursor?: string): Promise<any[]> {
   let files: any[] = [];
@@ -49,7 +51,7 @@ async function syncDropboxFiles() {
           path: file.path_display.replace(/\\/g, '/'),
           filename: file.name,
           modified_at: file.server_modified,
-          tags: [ext], // ✅ tag by file extension
+          tags: [ext],
           source: 'dropbox',
         };
       });
@@ -73,4 +75,3 @@ async function syncDropboxFiles() {
 }
 
 syncDropboxFiles();
-
