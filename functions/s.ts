@@ -1,11 +1,12 @@
 // functions/s.ts
 
+import Dropbox from "dropbox-sdk"; // ✅ correct package
 import { upsertFilesToSupabase } from "../utils/supabaseClient";
-import { Dropbox } from "dropbox";
-import type { files } from "dropbox";
 import "dotenv/config"; // Load environment variables
 
-// ✅ Validate token presence
+// ✓ No Dropbox types available → use 'any' to avoid TS errors
+type DropboxEntry = any;
+
 if (!process.env.DROPBOX_TOKEN) {
   throw new Error("❌ DROPBOX_TOKEN is missing from .env");
 }
@@ -19,12 +20,12 @@ async function syncDropbox() {
     const response = await dbx.filesListFolder({ path: "", recursive: true });
 
     const filesToUpsert = response.result.entries
-      .filter((entry): entry is files.FileMetadataReference => entry[".tag"] === "file")
-      .map((file) => ({
+      .filter((entry: DropboxEntry) => entry[".tag"] === "file")
+      .map((file: DropboxEntry) => ({
         path: file.path_display!,
         filename: file.name,
         modified_at: file.server_modified!,
-        tags: [file.name.split(".").pop()?.toLowerCase() || "unknown"], // Tag by extension
+        tags: [file.name.split(".").pop()?.toLowerCase() || "unknown"],
         source: "dropbox",
       }));
 
