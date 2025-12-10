@@ -41,7 +41,7 @@ async function scanForDuplicates() {
   const seen = new Map<string, FileEntry>();
   const duplicates: FileEntry[] = [];
 
-  for (const file of files as FileEntry[]) {
+  for (const file of files) {
     if (!file.filename || !file.modified_at) continue;
 
     const key = generateDupKey(file);
@@ -49,7 +49,7 @@ async function scanForDuplicates() {
     if (!seen.has(key)) {
       seen.set(key, file); // First one seen
     } else {
-      duplicates.push(file); // Duplicates to mark
+      duplicates.push(file); // Mark duplicates
     }
   }
 
@@ -59,6 +59,9 @@ async function scanForDuplicates() {
     const { error: updateError } = await supabase
       .from('file_index')
       .update({
+        duplicate: true,
+        is_primary: false,
+        legacy_reference: true, // ✅ Fixed comma here
         tags: [...(dup.tags || []), 'duplicate'],
         primary: false
       })
