@@ -11,7 +11,7 @@ if (!ACCESS_TOKEN) {
   throw new Error("❌ Missing DROPBOX_TOKEN in .env");
 }
 
-const dbx = new Dropbox({ accessToken: ACCESS_TOKEN }); // works with dropbox-sdk
+const dbx = new Dropbox({ accessToken: ACCESS_TOKEN });
 
 async function listAllFiles(cursor?: string): Promise<any[]> {
   let files: any[] = [];
@@ -39,13 +39,13 @@ async function syncDropboxFiles() {
     const allFiles = await listAllFiles();
 
     const filesToSave = allFiles
-      .filter(file =>
+      .filter((file: any) =>
         file[".tag"] === "file" &&
         typeof file.path_display === "string" &&
         typeof file.name === "string" &&
         typeof file.server_modified === "string"
       )
-      .map(file => {
+      .map((file: any) => {
         const ext = file.name.split('.').pop()?.toLowerCase() || 'unknown';
         return {
           path: file.path_display.replace(/\\/g, '/'),
