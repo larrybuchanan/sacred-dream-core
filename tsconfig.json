@@ -13,6 +13,6 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["functions/**/*"],
+  "include": ["functions/**/*", "types/**/*.d.ts"],
   "exclude": ["node_modules"]
 }

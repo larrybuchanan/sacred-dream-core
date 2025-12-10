@@ -1,9 +1,10 @@
 // functions/syncQuick.ts
 
-import Dropbox from "dropbox-sdk"; // ✅ Correct
+import { Dropbox, files } from "dropbox";
 import { upsertFilesToSupabase } from "../utils/supabaseClient";
 import "dotenv/config";
 
+// Initialize Dropbox client
 const dbx = new Dropbox({ accessToken: process.env.DROPBOX_TOKEN! });
 
 export async function syncQuick() {
@@ -16,11 +17,11 @@ export async function syncQuick() {
     });
 
     const filesToSave = response.result.entries
-      .filter((entry: any) => entry[".tag"] === "file")
-      .map((file: any) => ({
+      .filter((entry): entry is files.FileMetadataReference => entry[".tag"] === "file")
+      .map((file) => ({
         path: file.path_display!,
         filename: file.name,
-        modified_at: file.server_modified,
+        modified_at: file.server_modified!,
         tags: [file.name.split(".").pop()?.toLowerCase() || "unknown"],
         source: "dropbox",
       }));
@@ -36,5 +37,5 @@ export async function syncQuick() {
   }
 }
 
-// Run automatically if called directly
+// Run automatically if executed directly
 syncQuick();

@@ -12,7 +12,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.87.0",
     "dotenv": "^16.6.1",
-    "dropbox-sdk": "^0.1.1",
+    "dropbox": "^10.34.0",
     "mammoth": "^1.11.0",
     "pdf-parse": "^1.1.4"
   },
